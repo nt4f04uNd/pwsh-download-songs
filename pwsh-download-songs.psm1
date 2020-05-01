@@ -136,7 +136,7 @@ function download-songs {
          $imgSearch = @(Get-ChildItem "$BASE_FOLDER\$name.jpeg")
       }
       if ($imgSearch.length -eq 0) {
-         Write-Throw "Album art asset not found for $($_.Name).`nNote that only .png and .jpg/.jpeg are supported)"
+         Write-Error "Album art asset not found for '$($_.Name)'.`nNote that only .png and .jpg/.jpeg are supported"
          return
       }
 
