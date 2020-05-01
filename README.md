@@ -73,6 +73,6 @@ Respectively
 choco install youtube-dl ffmpeg imagemagick.app atomicparsley -y
 ```
 ```
-Remove-Module -Name pwsh-download-songs
+remove-module -Name pwsh-download-songs
 ```
 
