@@ -28,9 +28,9 @@ Passed to youtube-dl, so check its -f parameter and [its doc](https://github.com
 
 **-noPlaylist** - whether to download only the song/video, if the URL refers to a song/video and a playlist. Defaults to `$false`. See youtube-dl --no-playlist. param.
 
-**--saveThumbs** - whether to erase the song thumb image files after the download process. Defaults to `$false`.
+**-saveThumbs** - whether to erase the song thumb image files after the download process. Defaults to `$false`.
 
-**--seeFormats** - if true, the the songs/videos won't be downloaded, but the command will output the available formats. Defaults to `$false`.
+**-seeFormats** - if true, the the songs/videos won't be downloaded, but the command will output the available formats. Defaults to `$false`.
 
 ### **Examples**
 
