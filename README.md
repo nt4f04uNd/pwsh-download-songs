@@ -10,6 +10,21 @@ and source file is one of the followings: `.mp3, .m4a, .m4b, .m4p, .m4v, .mp4`, 
 
 ![demo](https://github.com/nt4f04uNd/pwsh-download-songs/blob/master/demo.gif?raw=true)
 
+## Installation
+
+Run the following command to install dependencies (you'll need the `choco`)
+
+```powershell
+choco install youtube-dl ffmpeg imagemagick.app atomicparsley -y
+```
+
+Then install the powershell module itself
+
+```powershell
+install-module -name pwsh-download-songs
+```
+
+
 ## Usage
 
 To see the help from console, use the following command in powershell
@@ -54,20 +69,6 @@ Download the whole playlist [**Yxngxr1**](https://music.youtube.com/playlist?lis
 
 ```powershell
  download-songs -saveThumbs "https://music.youtube.com/watch?v=jCcGMtGRw5s&list=PLv5tSVP9eg2nkbqapepgxXYGCESsfLcu9"
-```
-
-## Installation
-
-Run the following command to install dependencies (you'll need the `choco`)
-
-```powershell
-choco install youtube-dl ffmpeg imagemagick.app atomicparsley -y
-```
-
-Then install the powershell module itself
-
-```powershell
-install-module -name pwsh-download-songs
 ```
 
 ## Removal

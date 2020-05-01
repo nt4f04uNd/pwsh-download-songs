@@ -8,6 +8,20 @@
 
 ![demo](https://github.com/nt4f04uNd/pwsh-download-songs/blob/master/demo.gif?raw=true)
 
+## Установка
+
+Запустите следующую команду для установки зависимостей (вам понадобится `choco`)
+
+```powershell
+choco install youtube-dl ffmpeg imagemagick.app atomicparsley -y
+```
+
+Затем установите сам модуль
+
+```powershell
+install-module -name pwsh-download-songs
+```
+
 ## Использование
 
 Чтобы посмотреть помощь из консоли, используйте следующую команду powershell
@@ -52,20 +66,6 @@ download-songs -seeFormats -noPlaylist "https://www.youtube.com/watch?v=3ITW3pWa
 
 ```powershell
  download-songs -saveThumbs "https://music.youtube.com/watch?v=jCcGMtGRw5s&list=PLv5tSVP9eg2nkbqapepgxXYGCESsfLcu9"
-```
-
-## Установка
-
-Запустите следующую команду для установки зависимостей (вам понадобится `choco`)
-
-```powershell
-choco install youtube-dl ffmpeg imagemagick.app atomicparsley -y
-```
-
-Затем установите сам модуль
-
-```powershell
-install-module -name pwsh-download-songs
 ```
 
 ## Удаление
