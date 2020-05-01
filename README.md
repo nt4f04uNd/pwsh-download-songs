@@ -18,7 +18,7 @@ get-help download-songs -full
 ### **Syntax**
 `download-songs [-url] <String[]> [[-format] <String[]>] [-noPlaylist] [-saveThumbs] [-seeFormats] [<CommonParameters>]`
 
-### **Paramters description**
+### **Parameters description**
 
 **-url <String[]>** - the url to save songs from.
 
