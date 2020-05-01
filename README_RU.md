@@ -22,6 +22,12 @@ choco install youtube-dl ffmpeg imagemagick.app atomicparsley -y
 install-module -name pwsh-download-songs
 ```
 
+Скорее всего, вы не сможете пользоваться модулем, так как он имеет самоподписанный сертификат, который считается недоверенным. Чтобы позволить запускать недоверенные скрипты и модули, пропишите следующую команду, которая изменит Execution Policy
+
+```powershell
+Set-ExecutionPolicy RemoteSigned
+```
+
 ## Использование
 
 Чтобы посмотреть помощь из консоли, используйте следующую команду powershell

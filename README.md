@@ -24,6 +24,11 @@ Then install the powershell module itself
 install-module -name pwsh-download-songs
 ```
 
+Note that you probably won't be able to use the module because it's self-signed and considered untrusted. To allow running untrusted powershell scripts and modules, change the execution policy by running
+
+```powershell
+Set-ExecutionPolicy RemoteSigned
+```
 
 ## Usage
 
