@@ -128,12 +128,12 @@ function download-songs {
       $name = [io.path]::GetFileNameWithoutExtension($_.Name)
       $ext = [io.path]::GetExtension($_.Name)
  
-      $imgSearch = @(Get-ChildItem "$BASE_FOLDER\$name.jpg")
+      $imgSearch = @(Get-ChildItem -LiteralPath "$BASE_FOLDER\$name.jpg")
       if ($imgSearch.length -eq 0) {
-         $imgSearch = @(Get-ChildItem "$BASE_FOLDER\$name.png")
+         $imgSearch = @(Get-ChildItem -LiteralPath "$BASE_FOLDER\$name.png")
       }
       if ($imgSearch.length -eq 0) {
-         $imgSearch = @(Get-ChildItem "$BASE_FOLDER\$name.jpeg")
+         $imgSearch = @(Get-ChildItem -LiteralPath "$BASE_FOLDER\$name.jpeg")
       }
       if ($imgSearch.length -eq 0) {
          Write-Error "Album art asset not found for '$($_.Name)'.`nNote that only .png and .jpg/.jpeg are supported"
@@ -143,7 +143,7 @@ function download-songs {
       if ($ext -eq ".mp3") {
          ffmpeg -y -i "$BASE_FOLDER\$($_.Name)" -i "$BASE_FOLDER\$($imgSearch[0].Name)" -map 0 -map 1 -c copy -id3v2_version 3 -metadata:s:v title="Album cover" -metadata:s:v comment="Cover (front)" "$BASE_FOLDER\$($name)_temp.mp3"
          # ffmpeg can't write to the same file, so rename the output
-         Get-ChildItem "$BASE_FOLDER\$($name)_temp.mp3" | Move-Item -Force -Path { "$BASE_FOLDER\$($_.Name)" } -Destination { "$BASE_FOLDER\$($_.Name -replace '_temp', '')" }
+         Get-ChildItem -LiteralPath "$BASE_FOLDER\$($name)_temp.mp3" | Move-Item -Force -Path { "$BASE_FOLDER\$($_.Name)" } -Destination { "$BASE_FOLDER\$($_.Name -replace '_temp', '')" }
       }
       else {
          if (!$(Check-Command -cmdname 'AtomicParsley')){
