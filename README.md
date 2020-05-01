@@ -4,7 +4,7 @@ This is simple powershell utility to easily grab and download songs and playlist
 from popular websites.  
 
 It automatically inserts metadata to files and embeds cool squared album arts (if `.png` or `.jpg/.jpeg` format is available 
-and source file is one of the followings: `.mp3, .m4a, .m4b, .m4p, .m4v, .mp4,` this is true in most cases).
+and source file is one of the followings: `.mp3, .m4a, .m4b, .m4p, .m4v, .mp4`, which is true in most cases).
 
 ![demo](https://github.com/nt4f04uNd/pwsh-download-songs/blob/master/demo.gif?raw=true)
 
