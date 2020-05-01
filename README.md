@@ -46,7 +46,7 @@ Check all the available formats for the single song [**Psycho**](https://www.you
 download-songs -seeFormats -noPlaylist "https://www.youtube.com/watch?v=3ITW3pWaoWQ&list=OLAK5uy_mmO6QLOUTnk7GWFp_CVKH7B0gDgpGJI1A&index=2"
 ```
 
-Download the whole playlist [**Yxngxr1**](https://music.youtube.com/watch?v=jCcGMtGRw5s&list=PLv5tSVP9eg2nkbqapepgxXYGCESsfLcu9) from YouTube Music (despite the url points on a track) and save all its thumbs
+Download the whole playlist [**Yxngxr1**](https://music.youtube.com/playlist?list=PLv5tSVP9eg2nkbqapepgxXYGCESsfLcu9) from YouTube Music (despite the url points on a track) and save all its thumbs
  
 ```powershell
  download-songs -saveThumbs "https://music.youtube.com/watch?v=jCcGMtGRw5s&list=PLv5tSVP9eg2nkbqapepgxXYGCESsfLcu9"
