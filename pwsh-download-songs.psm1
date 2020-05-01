@@ -5,7 +5,7 @@
 
 <#
  .Synopsis
-  Downloads audio/video files from popular sites like youtube, and treats them so they look nice.
+  Downloads audio/video files from popular sites like youtube, and treats them, so they look nice.
 
  .Description
   Downloads audio/video files from popular sites like youtube, and treats them so they look nice.
