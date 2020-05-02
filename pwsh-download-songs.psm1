@@ -67,7 +67,7 @@ function download-songs {
       [switch]$seeFormats
    )
 
-   $ERROR_MESSAGE = "- command doesn't exists. See https://github.com/nt4f04und/pwsh-download-songs to install needed dependencies."
+   $ERROR_MESSAGE = "- command doesn't exist. See https://github.com/nt4f04und/pwsh-download-songs to install needed dependencies."
 
    # Checks if command exists
    function Check-Command($cmdname)
@@ -80,6 +80,12 @@ function download-songs {
    }
    if (!$(Check-Command -cmdname 'youtube-dl')) {
       throw "youtube-dl $ERROR_MESSAGE"
+   }
+   if (!$(Check-Command -cmdname 'magick')) {
+      throw "magick $ERROR_MESSAGE"
+   }
+   if (!$(Check-Command -cmdname 'AtomicParsley')){
+      throw "AtomicParsley $ERROR_MESSAGE"
    }
 
    $PREFIX = "[ STAGE ]"
@@ -115,9 +121,6 @@ function download-songs {
    # Autimatically removes NA from song and image names
    Get-ChildItem $BASE_FOLDER\*.* | Move-Item -Force -Path { "$BASE_FOLDER\$($_.Name)" } -Destination { "$BASE_FOLDER\$($_.Name -replace 'NA - ', '')" }
 
-   if (!$(Check-Command -cmdname 'magick')) {
-      throw "magick $ERROR_MESSAGE"
-   }
    Write-Output `n"$PREFIX Cropping album arts to squares..." `n
    magick mogrify -quality 100 -set option:distort:viewport "%[fx:w>h?h:w]x%[fx:w>h?h:w]+%[fx:w>h?(w-h)/2:0]+%[fx:w>h?0:(h-w)/2]" -filter point -distort SRT 0 +repage "$BASE_FOLDER\*.jpg" 
 
@@ -146,9 +149,6 @@ function download-songs {
          Get-ChildItem -LiteralPath "$BASE_FOLDER\$($name)_temp.mp3" | Move-Item -Force -Path { "$BASE_FOLDER\$($_.Name)" } -Destination { "$BASE_FOLDER\$($_.Name -replace '_temp', '')" }
       }
       else {
-         if (!$(Check-Command -cmdname 'AtomicParsley')){
-            throw "AtomicParsley $ERROR_MESSAGE"
-         }
          AtomicParsley "$BASE_FOLDER\$($_.Name)" --artwork "$BASE_FOLDER\$($imgSearch[0].Name)" --overWrite 
       }
    }
