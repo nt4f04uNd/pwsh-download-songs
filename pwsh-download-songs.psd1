@@ -12,7 +12,7 @@
 RootModule = 'pwsh-download-songs'
 
 # Version number of this module.
-ModuleVersion = '0.0.6'
+ModuleVersion = '0.0.7'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -30,7 +30,7 @@ CompanyName = 'Unknown'
 Copyright = '(c) nt4f04uNd. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'This is simple powershell utility to easily grab and download songs and playlists from popular websites. It automatically inserts metadata to files and embeds cool squared album arts (if `.png` or `.jpg/.jpeg` format is available and source file is one of the followings: `.mp3, .m4a, .m4b, .m4p, .m4v, .mp4,` this is true in most cases).'
+Description = 'This is simple powershell utility to easily grab and download songs and playlists from popular websites. It automatically inserts metadata to files and embeds cool squared album arts (if .png or .jpg/.jpeg format is available and source file is one of the followings: .mp3, .m4a, .m4b, .m4p, .m4v, .mp4, this is true in most cases).'
 
 # Minimum version of the PowerShell engine required by this module
 # PowerShellVersion = ''

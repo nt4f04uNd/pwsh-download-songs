@@ -9,8 +9,8 @@
 
  .Description
   Downloads audio/video files from popular sites like youtube, and treats them so they look nice.
-  Inserts metadata to files and embeds squared album arts (if .png or .jpg/.jpeg format is available 
-  and source file is one of the followings: .mp3, .m4a, .m4b, .m4p, .m4v, .mp4).
+  Inserts metadata to files and embeds squared album arts (if there are so and source file is one of 
+  the followings: .mp3, .m4a, .m4b, .m4p, .m4v, .mp4).
 
   For its work this function requires some dependencies
   See https://github.com/nt4f04und/pwsh-download-songs for installation instructions.
@@ -70,21 +70,21 @@ function download-songs {
    $ERROR_MESSAGE = "- command doesn't exist. See https://github.com/nt4f04und/pwsh-download-songs to install needed dependencies."
 
    # Checks if command exists
-   function Check-Command($cmdname)
+   function _check-command($cmdname)
    {
       return [bool](Get-Command -Name $cmdname -ErrorAction SilentlyContinue)
    }
 
-   if (!$(Check-Command -cmdname 'ffmpeg')) {
+   if (!$(_check-command -cmdname 'ffmpeg')) {
       throw "ffmpeg $ERROR_MESSAGE"
    }
-   if (!$(Check-Command -cmdname 'youtube-dl')) {
+   if (!$(_check-command -cmdname 'youtube-dl')) {
       throw "youtube-dl $ERROR_MESSAGE"
    }
-   if (!$(Check-Command -cmdname 'magick')) {
+   if (!$(_check-command -cmdname 'magick')) {
       throw "magick $ERROR_MESSAGE"
    }
-   if (!$(Check-Command -cmdname 'AtomicParsley')){
+   if (!$(_check-command -cmdname 'AtomicParsley')){
       throw "AtomicParsley $ERROR_MESSAGE"
    }
 
@@ -120,9 +120,7 @@ function download-songs {
 
    # Autimatically removes NA from song and image names
    Get-ChildItem $BASE_FOLDER\*.* | Move-Item -Force -Path { "$BASE_FOLDER\$($_.Name)" } -Destination { "$BASE_FOLDER\$($_.Name -replace 'NA - ', '')" }
-
-   Write-Output `n"$PREFIX Cropping album arts to squares..." `n
-   magick mogrify -quality 100 -set option:distort:viewport "%[fx:w>h?h:w]x%[fx:w>h?h:w]+%[fx:w>h?(w-h)/2:0]+%[fx:w>h?0:(h-w)/2]" -filter point -distort SRT 0 +repage "$BASE_FOLDER\*.jpg" 
+  
 
    Write-Output `n"$PREFIX Inserting album arts into songs... (only for .mp3, .m4a, .m4b, .m4p, .m4v and .mp4 files)" `n
    Get-ChildItem ".\$BASE_FOLDER\*" -Include `
@@ -130,39 +128,51 @@ function download-songs {
    | Foreach-Object { 
       $name = [io.path]::GetFileNameWithoutExtension($_.Name)
       $ext = [io.path]::GetExtension($_.Name)
- 
-      $imgSearch = @(Get-ChildItem -LiteralPath "$BASE_FOLDER\$name.jpg")
-      if ($imgSearch.length -eq 0) {
-         $imgSearch = @(Get-ChildItem -LiteralPath "$BASE_FOLDER\$name.png")
+      write-output $ext
+
+      # Convert any image format to png
+      if([System.IO.File]::Exists("$BASE_FOLDER\$name.jpg")){
+         magick convert "$BASE_FOLDER\$name.jpg" "$BASE_FOLDER\$name.png"
       }
-      if ($imgSearch.length -eq 0) {
-         $imgSearch = @(Get-ChildItem -LiteralPath "$BASE_FOLDER\$name.jpeg")
+      elseif([System.IO.File]::Exists("$BASE_FOLDER\$name.png")) {}
+      elseif([System.IO.File]::Exists("$BASE_FOLDER\$name.jpeg")) {
+         magick convert "$BASE_FOLDER\$name.jpeg" "$BASE_FOLDER\$name.png"
       }
-      if ($imgSearch.length -eq 0) {
-         Write-Error "Album art asset not found for '$($_.Name)'.`nNote that only .png and .jpg/.jpeg are supported"
+      elseif([System.IO.File]::Exists("$BASE_FOLDER\$name.webp")) {
+         magick convert "$BASE_FOLDER\$name.webp" "$BASE_FOLDER\$name.png"
+      }
+      elseif([System.IO.File]::Exists("$BASE_FOLDER\$name.bmp")) {
+         magick convert "$BASE_FOLDER\$name.bmp" "$BASE_FOLDER\$name.png"
+      }
+      elseif([System.IO.File]::Exists("$BASE_FOLDER\$name.gif")) {
+         magick convert "$BASE_FOLDER\$name.gif" "$BASE_FOLDER\$name.png"
+      }
+
+      $img = @(Get-ChildItem -LiteralPath "$BASE_FOLDER\$name.png")
+      if ($img.length -eq 0) {
+         Write-Error "Album art asset not found for '$($_.Name)'.`n"
          return
       }
 
+         magick mogrify -quality 100 -set option:distort:viewport "%[fx:w>h?h:w]x%[fx:w>h?h:w]+%[fx:w>h?(w-h)/2:0]+%[fx:w>h?0:(h-w)/2]" -filter point -distort SRT 0 +repage "$BASE_FOLDER\*.png"
       if ($ext -eq ".mp3") {
-         ffmpeg -y -i "$BASE_FOLDER\$($_.Name)" -i "$BASE_FOLDER\$($imgSearch[0].Name)" -map 0 -map 1 -c copy -id3v2_version 3 -metadata:s:v title="Album cover" -metadata:s:v comment="Cover (front)" "$BASE_FOLDER\$($name)_temp.mp3"
+         ffmpeg -y -i "$BASE_FOLDER\$($_.Name)" -i "$BASE_FOLDER\$($img[0].Name)" -map 0 -map 1 -c copy -id3v2_version 3 -metadata:s:v title="Album cover" -metadata:s:v comment="Cover (front)" "$BASE_FOLDER\$($name)_temp$ext"
          # ffmpeg can't write to the same file, so rename the output
-         Get-ChildItem -LiteralPath "$BASE_FOLDER\$($name)_temp.mp3" | Move-Item -Force -Path { "$BASE_FOLDER\$($_.Name)" } -Destination { "$BASE_FOLDER\$($_.Name -replace '_temp', '')" }
+         Get-ChildItem -LiteralPath "$BASE_FOLDER\$($name)_temp$ext" | Move-Item -Force -Path { "$BASE_FOLDER\$($_.Name)" } -Destination { "$BASE_FOLDER\$($_.Name -replace '_temp', '')" }
       }
       else {
-         AtomicParsley "$BASE_FOLDER\$($_.Name)" --artwork "$BASE_FOLDER\$($imgSearch[0].Name)" --overWrite 
+         AtomicParsley "$BASE_FOLDER\$($_.Name)" --artwork "$BASE_FOLDER\$($img[0].Name)" --overWrite 
       }
    }
 
+   Remove-Item $BASE_FOLDER\*.jpg
+   Remove-Item $BASE_FOLDER\*.jpeg
+   Remove-Item $BASE_FOLDER\*.webp
+   Remove-Item $BASE_FOLDER\*.bmp
+   Remove-Item $BASE_FOLDER\*.gif
    if (!$saveThumbs) {
-      Remove-Item $BASE_FOLDER\*.jpeg
-      Remove-Item $BASE_FOLDER\*.jpg
       Remove-Item $BASE_FOLDER\*.png
-      Remove-Item $BASE_FOLDER\*.png
-      Remove-Item $BASE_FOLDER\*.gif
-      Remove-Item $BASE_FOLDER\*.webp
-      Remove-Item $BASE_FOLDER\*.bmp
    }
-
 }
 Export-ModuleMember -Function download-songs
 # SIG # Begin signature block
