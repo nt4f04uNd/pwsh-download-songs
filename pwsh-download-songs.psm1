@@ -9,8 +9,8 @@
 
  .Description
   Downloads audio/video files from popular sites like youtube, and treats them so they look nice.
-  Inserts metadata to files and embeds squared album arts (if there are so and source file is one of 
-  the followings: .mp3, .m4a, .m4b, .m4p, .m4v, .mp4).
+  Inserts metadata to files and embeds squared album arts (if there are so and source file is one of the followings: `.mp3, .m4a, .m4b, .m4p, .m4v, .mp4`,
+  which is true in most cases).
 
   For its work this function requires some dependencies
   See https://github.com/nt4f04und/pwsh-download-songs for installation instructions.
